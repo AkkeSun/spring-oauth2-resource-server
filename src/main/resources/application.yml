@@ -7,9 +7,9 @@ spring:
       resourceserver:
         jwt:
           # 인가서버에 서명한 토큰의 위치
-          issuer-uri: http://localhost:8080/realms/oauth2
+          # issuer-uri: http://localhost:8080/realms/oauth2
           # 인가서버 위치
-          # jwk-set-uri: http://localhost:8080/realms/oauth2/protocol/openid-connect/certs
+          jwk-set-uri: http://localhost:8080/realms/oauth2/protocol/openid-connect/certs
           # 서명 갈고리즘
           # jws-algorithms: RSA256
           # 공개키 파일의 위치
