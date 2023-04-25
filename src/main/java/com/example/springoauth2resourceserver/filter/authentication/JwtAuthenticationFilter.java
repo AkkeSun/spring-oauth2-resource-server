@@ -1,25 +1,31 @@
-package com.example.springoauth2resourceserver.filter;
+package com.example.springoauth2resourceserver.filter.authentication;
 
 import com.example.springoauth2resourceserver.dto.LoginDTO;
+import com.example.springoauth2resourceserver.signer.SecuritySigner;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.jose.jwk.JWK;
 import java.io.IOException;
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /*
     인가서버를 대신하여 토큰을 발행하는 커스텀 필터
     1. 입력 파라미터 → LoginDTO 변경
     2. LoginDTO → UsernamePasswordAuthenticationToken 생성
-    3. UsernamePasswordAuthenticationToken 시큐리티에 저장
+    3. JWT 토큰 발행
  */
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
+    private final SecuritySigner securitySigner;
+    private final JWK jwk;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
@@ -31,12 +37,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
-        HttpServletResponse response, FilterChain chain, Authentication authResult)
-        throws IOException, ServletException {
-
-        // 인증 객채 security 에 저장
-        SecurityContextHolder.getContext().setAuthentication(authResult);
-        getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
+        HttpServletResponse response, FilterChain chain, Authentication authResult) {
+        // JWT 토큰 발행
+        User user = (User) authResult.getPrincipal();
+        String jwtToken = securitySigner.getJwtToken(user, jwk);
+        response.addHeader("Authorization", "Bearer " + jwtToken);
     }
 
     private LoginDTO getLoginDTO(HttpServletRequest request) {
