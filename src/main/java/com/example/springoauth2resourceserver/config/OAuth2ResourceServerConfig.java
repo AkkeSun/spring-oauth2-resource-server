@@ -1,7 +1,6 @@
 package com.example.springoauth2resourceserver.config;
 
 import com.example.springoauth2resourceserver.filter.authentication.JwtAuthenticationFilter;
-import com.example.springoauth2resourceserver.filter.authorization.JwtAuthorizationMacFilter;
 import com.example.springoauth2resourceserver.signer.MacSecuritySigner;
 import com.nimbusds.jose.jwk.OctetSequenceKey;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,8 +36,7 @@ public class OAuth2ResourceServerConfig {
         http.userDetailsService(userDetailsService());
         http.addFilterBefore(jwtAuthenticationFilter(macSecuritySigner, octetSequenceKey),
             UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new JwtAuthorizationMacFilter(octetSequenceKey),
-            UsernamePasswordAuthenticationFilter.class);
+        http.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
         return http.build();
     }
 

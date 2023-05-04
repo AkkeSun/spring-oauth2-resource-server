@@ -1,2 +1,9 @@
 server:
   port: 8081
+
+spring:
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          jws-algorithms: HS256
