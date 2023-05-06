@@ -2,9 +2,9 @@ package com.example.springoauth2resourceserver.filter.authorization;
 
 import com.nimbusds.jose.JWSVerifier;
 
-public class JwtAuthorizationMacFilter extends JwtAuthorizationFilter {
+public class JwtAuthorizationRsaFilter extends JwtAuthorizationFilter {
 
-    public JwtAuthorizationMacFilter(JWSVerifier jwsVerifier) {
+    public JwtAuthorizationRsaFilter(JWSVerifier jwsVerifier) {
         super(jwsVerifier);
     }
 }
