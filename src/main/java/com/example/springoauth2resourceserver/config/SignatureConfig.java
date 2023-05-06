@@ -16,12 +16,13 @@ public class SignatureConfig {
 
     private final String KEY_ID = "myKey";
 
+    // MAC 기반 토큰 발행기
     @Bean
     public MacSecuritySigner macSecuritySigner() {
         return new MacSecuritySigner();
     }
 
-    // JWK 구현체
+    // MAC 기반 JWK
     @Bean
     public OctetSequenceKey octetSequenceKey() throws JOSEException {
         return new OctetSequenceKeyGenerator(256)
@@ -30,11 +31,13 @@ public class SignatureConfig {
             .generate();
     }
 
+    // RSA 기반 토큰 발행 객채
     @Bean
     public RsaSecuritySigner rsaSecuritySigner(){
         return new RsaSecuritySigner();
     }
 
+    // RSA 기반 JWK
     @Bean
     public RSAKey rsaKey() throws JOSEException {
         RSAKey rsaKey = new RSAKeyGenerator(2048)

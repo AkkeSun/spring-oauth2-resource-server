@@ -24,7 +24,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    // 토큰 발행기
     private final SecuritySigner securitySigner;
+
+    // 알고리즘과 키를 가지고 있는 객채
     private final JWK jwk;
 
     @Override
