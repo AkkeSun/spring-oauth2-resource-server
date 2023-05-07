@@ -1,5 +1,6 @@
 package com.example.springoauth2resourceserver.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -35,6 +36,7 @@ public class ApiController {
     }
 
     @GetMapping("/photos/2")
+    @PreAuthorize("hasAnyAuthority('SCOPE_photo')")
     public String photo2() {
         return "success";
     }
